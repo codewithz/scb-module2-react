@@ -14,7 +14,7 @@ function RoutingHome(){
        
         <div>
           <NavbarComponent />
-            <Switch>
+           
                 <Route path="/products/:id" component={ProductDetails} />
                 <Route path="/products" component={Products} />
                 <Route path="/posts/:year?/:month?" component={Posts} />
@@ -23,7 +23,7 @@ function RoutingHome(){
                 <Route path="/city" render={()=><CityComponent cityName='Mumbai'/>} />
                 <Route path="/"  exact component={Home} />
                 <Redirect to="/not-found" />
-            </Switch>
+          
         </div>
         
 

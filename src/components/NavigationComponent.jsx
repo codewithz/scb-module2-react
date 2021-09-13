@@ -37,6 +37,9 @@ function NavigationComponent(){
             <li class="nav-item">
               <Link className="nav-link" to="/material">Material UI</Link>
             </li>
+            <li class="nav-item">
+              <Link className="nav-link" to="/toastify">Toastify</Link>
+            </li>
 
           </ul>
         </div>
