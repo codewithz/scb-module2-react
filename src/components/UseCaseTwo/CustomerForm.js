@@ -2,9 +2,19 @@ import React,{useState} from 'react';
 
 function CustomerForm(props){
 
-    const[firstName,setFirstName]=useState('');
-    const[lastName,setLastName]=useState('');
-    const[email,setEmail]=useState('');
+    const baseURL='http://localhost:9009/api/v1/pioneers/common';
+
+    const[customer,setCustomer]=useState({
+        id:0,
+        name:"",
+        email:"",
+        phone:0,
+        accountType:""
+    });
+
+    // const[firstName,setFirstName]=useState('');
+    // const[lastName,setLastName]=useState('');
+    // const[email,setEmail]=useState('');
 
     // const handleFirstName=(event)=>{
     //     console.log('event',event)
@@ -23,19 +33,25 @@ function CustomerForm(props){
 
     const handleInput=(event)=>{
 
-        console.log(event);
+        const {name,value}=event.target;
 
-        const sourceElement=event.target.name;
+        let customerCopy={...customer};
+        customerCopy[name]=value;
+        setCustomer(customerCopy);
 
-        if(sourceElement==='firstName'){
-            setFirstName(event.target.value);
-        }
-        if(sourceElement==='lastName'){
-            setLastName(event.target.value);
-        }
-        if(sourceElement==='email'){
-            setEmail(event.target.value);
-        }
+        // console.log(event);
+
+        // const sourceElement=event.target.name;
+
+        // if(sourceElement==='firstName'){
+        //     setFirstName(event.target.value);
+        // }
+        // if(sourceElement==='lastName'){
+        //     setLastName(event.target.value);
+        // }
+        // if(sourceElement==='email'){
+        //     setEmail(event.target.value);
+        // }
 
         
     }
@@ -45,9 +61,7 @@ function CustomerForm(props){
         event.preventDefault();
 
         const customer={
-            firstName:firstName,
-            lastName:lastName,
-            email:email
+           
         }
         props.saveCustomer(customer);
         clearState();
@@ -55,9 +69,9 @@ function CustomerForm(props){
     }
 
     const clearState=()=>{
-        setFirstName('');
-        setLastName('');
-        setEmail('');
+        // setFirstName('');
+        // setLastName('');
+        // setEmail('');
     }
 
 
@@ -70,32 +84,43 @@ function CustomerForm(props){
 
             <form className="ui form">
                 <div className="form-group">
-                    <label>First Name:</label>
+                    <label> Name:</label>
                     <input 
                         type="text"
-                        name="firstName"
+                        name="name"
                         className="form-control"
-                        value={firstName}
+                        value={customer.name}
                         onChange={handleInput}
                     />
                 </div>
-                <div className="form-group">
-                    <label>Last Name:</label>
-                    <input 
-                        type="text"
-                        name="lastName"
-                        className="form-control"
-                        value={lastName}
-                        onChange={handleInput}
-                    />
-                </div>
+               
                 <div className="form-group">
                     <label>Email:</label>
                     <input 
                         type="email"
                         name="email"
                         className="form-control"
-                        value={email}
+                        value={customer.email}
+                        onChange={handleInput}
+                    />
+                </div>
+                <div className="form-group">
+                    <label>Phone:</label>
+                    <input 
+                        type="text"
+                        name="phone"
+                        className="form-control"
+                        value={customer.phone}
+                        onChange={handleInput}
+                    />
+                </div>
+                <div className="form-group">
+                    <label>Account Type:</label>
+                    <input 
+                        type="text"
+                        name="accountType"
+                        className="form-control"
+                        value={customer.accountType}
                         onChange={handleInput}
                     />
                 </div>

@@ -1,20 +1,43 @@
-import React,{useState} from 'react';
-import customerData from './customer.json';
+import React,{useState,useEffect} from 'react';
+//import customerData from './customer.json';
 import CustomerForm from './CustomerForm';
 import CustomerDetails from './CustomerDetails';
+import axios from 'axios';
 
 function CustomerList(){
 
-    const[customers,setCustomers]=useState(customerData);
+   const baseURL='http://localhost:9009/api/v1/pioneers/common';
+
+    const[customers,setCustomers]=useState([]);
     const[selectedCustomer,setSelectedCustomer]=useState(null);
+
+    useEffect(()=>{
+            getCustomers();
+    },[]);
+
+    const getCustomers=async ()=>{
+        //promise[pending] > resolved(success) OR rejected(failure)
+      //  const promise=axios.get('http://localhost:9009/api/v1/pioneers/common/customer');
+      const apiEndpoint=baseURL+'/customer';  
+      
+      const response=await axios.get(apiEndpoint);;
+        console.log(response.data.body)
+        setCustomers(response.data.body);
+    }
 
     const tableRows=customers.map((customer)=>{
     return  (
     <tr key={customer.id} onClick={()=>onCustomerSelect(customer)}>
      <td>{customer.id}</td>   
-     <td>{customer.firstName}</td>   
-     <td>{customer.lastName}</td>   
+     <td>{customer.name}</td>   
      <td>{customer.email}</td>   
+     <td>{customer.phone}</td>   
+     <td>{customer.accountType}</td>   
+     <td>
+         <button className="btn btn-warning btn-sm">Show</button>
+        &nbsp;
+         <button className="btn btn-danger btn-sm">Delete</button>
+     </td>
     </tr>
     )}
     );
@@ -43,9 +66,11 @@ function CustomerList(){
                 <thead>
                    <tr>
                        <th>ID</th>
-                       <th>First Name</th>
-                       <th>Last Name</th>
+                       <th>Name</th>
                        <th>Email</th>
+                       <th>Phone</th>
+                       <th>Account Type</th>
+                       <th>Actions</th>
                    </tr>
                 </thead>
                 <tbody>

@@ -40,6 +40,9 @@ function NavigationComponent(){
             <li class="nav-item">
               <Link className="nav-link" to="/toastify">Toastify</Link>
             </li>
+            <li class="nav-item">
+              <Link className="nav-link" to="/validation">Validation-JOI</Link>
+            </li>
 
           </ul>
         </div>

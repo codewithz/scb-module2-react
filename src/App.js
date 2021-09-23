@@ -10,6 +10,7 @@ import MaterialUIHome from './components/material-ui/MaterialUIHome';
 import { ToastContainer } from 'react-toastify';
 import ToastifyHome from './components/toastify/ToastifyHome';
 import 'react-toastify/dist/ReactToastify.css';
+import ValidationJoiHome from './components/validation-joi/ValidationJoiHome';
 function App() {
   return (
     <div className="App">
@@ -24,6 +25,7 @@ function App() {
             <Route path="/routing" component={RoutingHome} />
             <Route path="/material" component={MaterialUIHome} />
             <Route path="/toastify" component={ToastifyHome} />
+            <Route path="/validation" component={ValidationJoiHome} />
           </Switch>
 
         </BrowserRouter>
