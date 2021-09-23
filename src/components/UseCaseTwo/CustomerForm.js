@@ -1,4 +1,6 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 function CustomerForm(props){
 
@@ -11,6 +13,19 @@ function CustomerForm(props){
         phone:0,
         accountType:""
     });
+
+    useEffect(()=>{
+       loadCustomer();
+    },[props.id])
+
+    const loadCustomer=async ()=>{
+        if(props.id>0){
+            const apiEndpoint=`${baseURL}/customer/${props.id}`;
+            const response=await axios.get(apiEndpoint);
+            setCustomer(response.data.body);
+         }
+
+    }
 
     // const[firstName,setFirstName]=useState('');
     // const[lastName,setLastName]=useState('');
@@ -56,23 +71,58 @@ function CustomerForm(props){
         
     }
 
-    const handleSave=(event)=>{
+    const handleSave=async (event)=>{
 
         event.preventDefault();
-
-        const customer={
-           
+        
+        //Validation Code
+        if(customer.id===0){
+        const apiEndpoint=baseURL+"/customer";
+        const response=await axios.post(apiEndpoint,customer);
+        console.log(response.data);
+        if(response.data.status===201){
+            toast.success('Customer Added Successfully');
+            clearState();
         }
-        props.saveCustomer(customer);
-        clearState();
+    }
+    else{
+        const apiEndpoint=baseURL+"/customer/"+customer.id;
+        const response=await axios.put(apiEndpoint,customer);
+        console.log(response.data);
+        if(response.data.status===200){
+            toast.warning('Customer Updated Successfully');
+            clearState();
+        }
+    }
+
 
     }
 
     const clearState=()=>{
-        // setFirstName('');
-        // setLastName('');
-        // setEmail('');
+      
+       const blankCustomer={
+        id:0,
+        name:"",
+        email:"",
+        phone:0,
+        accountType:""
+    };
+
+    setCustomer(blankCustomer);
     }
+
+    const clearForm=(event)=>{
+        event.preventDefault();
+        const blankCustomer={
+         id:0,
+         name:"",
+         email:"",
+         phone:0,
+         accountType:""
+     };
+ 
+     setCustomer(blankCustomer);
+     }
 
 
 
@@ -130,6 +180,14 @@ function CustomerForm(props){
                     onClick={handleSave}
                     >    
                         Add Customer
+                </button>
+
+                &nbsp;
+                <button 
+                    className="btn btn-info"
+                    onClick={clearForm}
+                    >    
+                        Clear Form
                 </button>
 
             </form>

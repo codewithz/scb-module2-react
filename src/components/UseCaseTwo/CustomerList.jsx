@@ -4,16 +4,19 @@ import CustomerForm from './CustomerForm';
 import CustomerDetails from './CustomerDetails';
 import axios from 'axios';
 
+import { toast } from 'react-toastify';
+
 function CustomerList(){
 
    const baseURL='http://localhost:9009/api/v1/pioneers/common';
 
     const[customers,setCustomers]=useState([]);
     const[selectedCustomer,setSelectedCustomer]=useState(null);
+    const[id,setId]=useState(0);
 
     useEffect(()=>{
             getCustomers();
-    },[]);
+    });
 
     const getCustomers=async ()=>{
         //promise[pending] > resolved(success) OR rejected(failure)
@@ -34,9 +37,14 @@ function CustomerList(){
      <td>{customer.phone}</td>   
      <td>{customer.accountType}</td>   
      <td>
-         <button className="btn btn-warning btn-sm">Show</button>
+         <button className="btn btn-warning btn-sm"
+            onClick={()=>setId(customer.id)}
+         >Show</button>
         &nbsp;
-         <button className="btn btn-danger btn-sm">Delete</button>
+         <button className="btn btn-danger btn-sm"
+            onClick={(event)=>deleteCustomer(event,customer.id)}
+         
+         >Delete</button>
      </td>
     </tr>
     )}
@@ -44,6 +52,27 @@ function CustomerList(){
 
     const onCustomerSelect=(customer)=>{
         setSelectedCustomer(customer);
+    }
+
+
+    const deleteCustomer=async(event,id)=>{
+
+        event.preventDefault();
+        alert(id);
+
+        const apiEndpoint=`${baseURL}/customer/${id}`;
+
+        const response=await axios.delete(apiEndpoint);
+         if(response.data.status===200){
+             toast.success('Customer Deleted Successfully');
+
+             let updatedCustomers=customers.filter(
+                 (customer)=>customer.id!==id
+             );
+
+             setCustomers(updatedCustomers);
+         }
+
     }
 
     
@@ -82,7 +111,7 @@ function CustomerList(){
 
             <div className="row">
                 <div className="col-md-6">
-                    <CustomerForm saveCustomer={addCustomer}/>
+                    <CustomerForm id={id}/>
                 
                 </div>
 
