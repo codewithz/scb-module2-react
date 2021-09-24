@@ -1,10 +1,11 @@
 import React,{useState,useEffect} from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import config from '../../config.json';
 
 function CustomerForm(props){
 
-    const baseURL='http://localhost:9009/api/v1/pioneers/common';
+    const baseURL=config.baseURL;
 
     const[customer,setCustomer]=useState({
         id:0,

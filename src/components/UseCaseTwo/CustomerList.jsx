@@ -3,12 +3,13 @@ import React,{useState,useEffect} from 'react';
 import CustomerForm from './CustomerForm';
 import CustomerDetails from './CustomerDetails';
 import axios from 'axios';
+import config from '../../config.json';
 
 import { toast } from 'react-toastify';
 
 function CustomerList(){
 
-   const baseURL='http://localhost:9009/api/v1/pioneers/common';
+   const baseURL=config.baseURL;
 
     const[customers,setCustomers]=useState([]);
     const[selectedCustomer,setSelectedCustomer]=useState(null);
@@ -16,7 +17,7 @@ function CustomerList(){
 
     useEffect(()=>{
             getCustomers();
-    });
+    },[]);
 
     const getCustomers=async ()=>{
         //promise[pending] > resolved(success) OR rejected(failure)
@@ -24,7 +25,7 @@ function CustomerList(){
       const apiEndpoint=baseURL+'/customer';  
       
       const response=await axios.get(apiEndpoint);;
-        console.log(response.data.body)
+        //console.log(response.data.body)
         setCustomers(response.data.body);
     }
 
@@ -58,10 +59,10 @@ function CustomerList(){
     const deleteCustomer=async(event,id)=>{
 
         event.preventDefault();
-        alert(id);
+        
 
-        const apiEndpoint=`${baseURL}/customer/${id}`;
-
+        const apiEndpoint=`${baseURL}/customer/10001`;
+        try{
         const response=await axios.delete(apiEndpoint);
          if(response.data.status===200){
              toast.success('Customer Deleted Successfully');
@@ -72,6 +73,29 @@ function CustomerList(){
 
              setCustomers(updatedCustomers);
          }
+        }
+        catch(ex){
+
+            console.log('ex.Request--->',ex.request);
+            console.log('ex.Response--->',ex.response);
+            
+            //Expected [404:Not Found | 400: Bad Request] -- CLIENT ERRORS
+            //-- Display a specific error message
+
+            if(ex.response && ex.response.status===404){
+                toast.error(ex.response.data.message);
+            }
+            //
+            //Unexpected [Network Down | Server Down | DB Down | Bug]
+            //--Log Them
+            //-- Display a generic and friendly message Message 
+            else{
+                toast.error(' 🚨 Some unexpected error occurred!!');
+
+            }
+         //   toast.error('Something went wrong while deleting');
+
+        }
 
     }
 
