@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from 'react';
-import axios from 'axios';
+import http from '../../service/HttpService';
 import { toast } from 'react-toastify';
 import config from '../../config.json';
 
@@ -22,7 +22,7 @@ function CustomerForm(props){
     const loadCustomer=async ()=>{
         if(props.id>0){
             const apiEndpoint=`${baseURL}/customer/${props.id}`;
-            const response=await axios.get(apiEndpoint);
+            const response=await http.get(apiEndpoint);
             setCustomer(response.data.body);
          }
 
@@ -79,7 +79,7 @@ function CustomerForm(props){
         //Validation Code
         if(customer.id===0){
         const apiEndpoint=baseURL+"/customer";
-        const response=await axios.post(apiEndpoint,customer);
+        const response=await http.post(apiEndpoint,customer);
         console.log(response.data);
         if(response.data.status===201){
             toast.success('Customer Added Successfully');
@@ -88,7 +88,7 @@ function CustomerForm(props){
     }
     else{
         const apiEndpoint=baseURL+"/customer/"+customer.id;
-        const response=await axios.put(apiEndpoint,customer);
+        const response=await http.put(apiEndpoint,customer);
         console.log(response.data);
         if(response.data.status===200){
             toast.warning('Customer Updated Successfully');

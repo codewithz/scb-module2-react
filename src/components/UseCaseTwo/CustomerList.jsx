@@ -1,11 +1,11 @@
 import React,{useState,useEffect} from 'react';
-//import customerData from './customer.json';
 import CustomerForm from './CustomerForm';
 import CustomerDetails from './CustomerDetails';
-import axios from 'axios';
+import http from '../../service/HttpService';
 import config from '../../config.json';
 
 import { toast } from 'react-toastify';
+
 
 function CustomerList(){
 
@@ -24,7 +24,7 @@ function CustomerList(){
       //  const promise=axios.get('http://localhost:9009/api/v1/pioneers/common/customer');
       const apiEndpoint=baseURL+'/customer';  
       
-      const response=await axios.get(apiEndpoint);;
+      const response=await http.get(apiEndpoint);;
         //console.log(response.data.body)
         setCustomers(response.data.body);
     }
@@ -61,9 +61,9 @@ function CustomerList(){
         event.preventDefault();
         
 
-        const apiEndpoint=`${baseURL}/customer/10001`;
+        const apiEndpoint=`${baseURL}/customer/${id}`;
         try{
-        const response=await axios.delete(apiEndpoint);
+        const response=await http.delete(apiEndpoint);
          if(response.data.status===200){
              toast.success('Customer Deleted Successfully');
 
@@ -76,8 +76,10 @@ function CustomerList(){
         }
         catch(ex){
 
-            console.log('ex.Request--->',ex.request);
-            console.log('ex.Response--->',ex.response);
+            // console.log('HANDLE DELETE CATCH BLOCK.')
+
+            // console.log('ex.Request--->',ex.request);
+            // console.log('ex.Response--->',ex.response);
             
             //Expected [404:Not Found | 400: Bad Request] -- CLIENT ERRORS
             //-- Display a specific error message
@@ -89,10 +91,10 @@ function CustomerList(){
             //Unexpected [Network Down | Server Down | DB Down | Bug]
             //--Log Them
             //-- Display a generic and friendly message Message 
-            else{
-                toast.error(' 🚨 Some unexpected error occurred!!');
+            // else{
+            //     toast.error(' 🚨 Some unexpected error occurred!!');
 
-            }
+            // }
          //   toast.error('Something went wrong while deleting');
 
         }
